@@ -1,0 +1,37 @@
+{
+    "name": "poseidon-encryption-circom",
+    "version": "0.0.1",
+    "description": "Encryption and decryption using Poseidon",
+    "main": "build/index.js",
+    "scripts": {
+        "circom-helper": "circom-helper -c ./circomHelperConfig.json -nc -b ./build/test/ -p 9001",
+        "test-encrypt": "node ./node_modules/.bin/jest poseidonEncrypt.test.ts",
+        "test-encrypt-debug": "node --inspect-brk ./node_modules/.bin/jest poseidonEncrypt.test.ts",
+        "watch": "tsc --watch",
+        "build": "tsc",
+        "prepare": "npm run build",
+        "test": "jest --force-exit"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/weijiekoh/poseidon-encryption-circom.git"
+    },
+    "author": "Koh Wei Jie",
+    "license": "MIT",
+    "homepage": "https://github.com/weijiekoh/poseidon-encryption-circom",
+    "devDependencies": {
+        "@types/jest": "^26.0.23",
+        "jest": "^26.6.3",
+        "ts-jest": "^26.5.6",
+        "typescript": "^4.2.4"
+    },
+    "dependencies": {
+        "circom": "^0.5.45",
+        "circom_runtime": "^0.1.13",
+        "circom-helper": "^0.1.10",
+        "circomlib": "^0.5.2",
+        "ffiasm": "^0.1.3",
+        "maci-crypto": "^0.7.4",
+        "snarkjs": "^0.3.60"
+    }
+}
