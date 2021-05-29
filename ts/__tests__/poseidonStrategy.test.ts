@@ -15,7 +15,7 @@ const expected = [
     'e7ae82e40091e63cbd4f16a6d16310b3729d4b6e138fcf54110e2867045a30c',
 ]
 
-const inputs = [1, 2]
+const inputs = [0, 1, 2]
 const circuit = 'poseidonStrategy_test'
 
 describe('poseidonStrategy function and circuit', () => {

@@ -14,6 +14,7 @@ const test = (message: BigInt[]) => {
         }
         expect(message[i]).toEqual(decrypted[i])
     }
+    expect(message.length).toEqual(decrypted.length)
 }
 
 describe('Encryption and decryption', () => {

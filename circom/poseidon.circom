@@ -1,6 +1,7 @@
 include "../node_modules/circomlib/circuits/poseidon_constants.circom";
 include "../node_modules/circomlib/circuits/bitify.circom";
 include "../node_modules/circomlib/circuits/escalarmulany.circom";
+include "../node_modules/circomlib/circuits/comparators.circom";
 
 // The S-box function. For BN254, it is (in ^ 5)
 template Sigma() {
@@ -64,7 +65,7 @@ template PoseidonStrategy(nInputs) {
     var C[t*(nRoundsF + nRoundsP)] = POSEIDON_C(t);
     var M[t][t] = POSEIDON_M(t);
 
-    signal input inputs[nInputs];
+    signal input inputs[t];
     signal output out[t];
 
     component ark[nRoundsF + nRoundsP];
@@ -78,11 +79,7 @@ template PoseidonStrategy(nInputs) {
         ark[i] = Ark(t, C, t*i);
         for (var j=0; j<t; j++) {
             if (i==0) {
-                if (j>0) {
-                    ark[i].in[j] <== inputs[j-1];
-                } else {
-                    ark[i].in[j] <== 0;
-                }
+                ark[i].in[j] <== inputs[j];
             } else {
                 ark[i].in[j] <== mix[i-1].out[j];
             }
@@ -114,10 +111,63 @@ template PoseidonStrategy(nInputs) {
     }
 }
 
-template PoseidonEncrypt(messageLength) {
-    signal input message[messageLength];
+template PoseidonDecrypt(l) {
+    var decryptedLength = l;
+    while (decryptedLength % 3 != 0) {
+        decryptedLength += 1;
+    }
+    // e.g. if l == 4, decryptedLength == 6
+
+    signal private input ciphertext[decryptedLength + 1];
+    signal input nonce;
     signal input key[2];
-    signal output ciphertext[messageLength];
+    signal output decrypted[decryptedLength];
+
+    var two128 = 2 ** 128;
+
+    // The nonce must be less than 2 ^ 128
+    component lt = LessThan(252);
+    lt.in[0] <== nonce;
+    lt.in[1] <== two128;
+    lt.out === 1;
+
+    var n = (decryptedLength + 1) \ 3;
+
+    component strategies[n + 1];
+    // Iterate Poseidon on the initial state
+    strategies[0] = PoseidonStrategy(3);
+    strategies[0].inputs[0] <== 0;
+    strategies[0].inputs[1] <== key[0];
+    strategies[0].inputs[2] <== key[1];
+    strategies[0].inputs[3] <== nonce + (l * two128);
+
+    for (var i = 0; i < n; i ++) {
+        // Release three elements of the message
+        for (var j = 0; j < 3; j ++) {
+            decrypted[i * 3 + j] <== ciphertext[i * 3 + j] - strategies[i].out[j + 1];
+        }
+
+        // Iterate Poseidon on the state
+        strategies[i + 1] = PoseidonStrategy(3);
+        strategies[i + 1].inputs[0] <== strategies[i].out[0];
+        for (var j = 0; j < 3; j ++) {
+            strategies[i + 1].inputs[j + 1] <== ciphertext[i * 3 + j];
+        }
+    }
+
+    // Check the last ciphertext element
+    ciphertext[decryptedLength] === strategies[n].out[1];
+
+    // If length > 3, check if the last (3 - (l mod 3)) elements of the message
+    // are 0
+    if (l % 3 > 0) {
+        if (l % 3 == 2) {
+            decrypted[decryptedLength - 1] === 0;
+        } else if (l % 3 == 2) {
+            decrypted[decryptedLength - 1] === 0;
+            decrypted[decryptedLength - 2] === 0;
+        }
+    }
 }
 
 
