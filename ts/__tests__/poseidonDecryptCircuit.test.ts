@@ -49,7 +49,7 @@ const test = async (circuit: string, messageLength: number) => {
         message.push(genRandomSalt())
     }
     const key = [BigInt(123), BigInt(456)]
-    const nonce = BigInt(789)
+    const nonce = genRandomNonce()
     const ciphertext = poseidonEncrypt(message, key, nonce)
     const decrypted = poseidonDecrypt(ciphertext, key, nonce, message.length)
 
