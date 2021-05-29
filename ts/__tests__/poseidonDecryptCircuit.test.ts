@@ -29,6 +29,10 @@ describe('Decryption in a circuit', () => {
         }
     })
 
+    it('l = 1', async () => {
+        test('poseidonDecrypt1_test', 1)
+    })
+
     it('l = 2', async () => {
         test('poseidonDecrypt2_test', 2)
     })
@@ -39,6 +43,26 @@ describe('Decryption in a circuit', () => {
 
     it('l = 4', async () => {
         test('poseidonDecrypt4_test', 4)
+    })
+
+
+    it('l = 5', async () => {
+        test('poseidonDecrypt5_test', 5)
+    })
+
+
+    it('l = 6', async () => {
+        test('poseidonDecrypt6_test', 6)
+    })
+
+
+    it('l = 7', async () => {
+        test('poseidonDecrypt7_test', 7)
+    })
+
+
+    it('l = 8', async () => {
+        test('poseidonDecrypt8_test', 8)
     })
 
 })
