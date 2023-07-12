@@ -1,9 +1,0 @@
-{
-    "circom": "./node_modules/circom/cli.js",
-    "snarkjs": "./node_modules/snarkjs/build/cli.cjs",
-    "circom_runtime": "./node_modules/circom_runtime",
-    "ffiasm": "./node_modules/ffiasm",
-    "circuitDirs": [
-        "./circom/test/"
-    ]
-}

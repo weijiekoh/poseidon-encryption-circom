@@ -1,11 +1,12 @@
 {
     "name": "poseidon-encryption-circom",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Encryption and decryption using Poseidon",
     "main": "build/index.js",
     "scripts": {
-        "circom-helper": "circom-helper -c ./circomHelperConfig.json -nc -b ./build/test/ -p 9001",
         "test-encrypt": "node ./node_modules/.bin/jest poseidonEncrypt.test.ts",
+        "test-decryptCircuit": "node ./node_modules/.bin/jest poseidonDecryptCircuit.test.ts",
+        "test-strategy": "node ./node_modules/.bin/jest poseidonStrategy.test.ts",
         "test-encrypt-debug": "node --inspect-brk ./node_modules/.bin/jest poseidonEncrypt.test.ts",
         "watch": "tsc --watch",
         "build": "tsc",
@@ -17,6 +18,10 @@
         "url": "git+https://github.com/weijiekoh/poseidon-encryption-circom.git"
     },
     "author": "Koh Wei Jie",
+    "contributors": [
+        "Koh Wei Jie",
+        "Shigoto-dev19 <shigoto-dev19@protonmail.com>"
+    ],
     "license": "MIT",
     "homepage": "https://github.com/weijiekoh/poseidon-encryption-circom",
     "devDependencies": {
@@ -26,12 +31,12 @@
         "typescript": "^4.2.4"
     },
     "dependencies": {
-        "circom": "^0.5.45",
-        "circom_runtime": "^0.1.13",
-        "circom-helper": "^0.1.10",
-        "circomlib": "^0.5.2",
+        "circom_tester": "^0.0.19",
+        "circomlib": "^2.0.5",
+        "circomlibjs": "^0.1.2",
         "ffiasm": "^0.1.3",
         "maci-crypto": "^0.7.4",
+        "path": "^0.12.7",
         "snarkjs": "^0.3.60"
     }
 }
