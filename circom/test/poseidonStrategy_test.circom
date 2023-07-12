@@ -1,3 +1,5 @@
+pragma circom 2.0.6;
+
 include "../poseidon.circom";
 
-component main = PoseidonStrategy(2);
+component main = PoseidonEx(3, 4);
